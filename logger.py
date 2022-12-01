@@ -4,6 +4,7 @@ from pandas import json_normalize
 import json
 import datetime
 import time
+from os import remove
 from pytz import UTC as utc
 import gspread
 import swagger_client
@@ -53,10 +54,12 @@ scope = [
 file_name = 'client_key.json'
 creds = ServiceAccountCredentials.from_json_keyfile_name(file_name,scope)
 client = gspread.authorize(creds)
-open('client_key.json', 'w').close()
+open('client_key.json', 'w').close(),
 open('client_secret.json', 'w').close()
+remove('client_key.json')
+remove('client_secret.json')
 
-
+# opening the sheet
 sheet_name = 'SDDBT - CCNC Training' 
 worksheet_name = 'Group 8'
 sheet = client.open(sheet_name).worksheet(worksheet_name)
