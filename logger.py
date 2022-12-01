@@ -10,24 +10,18 @@ import swagger_client
 from swagger_client.rest import ApiException
 from oauth2client.service_account import ServiceAccountCredentials
 # %%
-with open('strava_tokens.json') as json_file:
-    strava_tokens = json.load(json_file)
-
-if strava_tokens['expires_at'] < time.time():
-    response = requests.post(
-        url = 'https://www.strava.com/oauth/token',
-        data = {
-                'client_id': [60423],
-                'client_secret': ['70452786e2068633e53d1a4e0fb13e674cda6380'],
-                'code': ['3e69f37f0156c069c35a3e705311e4924b2b6052'],
-                'grant_type': 'authorization_code'
-                }
-    )
-    strava_tokens = response.json()
-    new_strava_tokens = response.json()
-    with open('strava_tokens.json', 'w') as outfile:
-        json.dump(new_strava_tokens, outfile)
-    strava_tokens = new_strava_tokens
+response = requests.post(
+    url = 'https://www.strava.com/oauth/token',
+    data = {
+            'client_id': [60423],
+            'client_secret': ['70452786e2068633e53d1a4e0fb13e674cda6380'],
+            'code': ['3e69f37f0156c069c35a3e705311e4924b2b6052'],
+            'grant_type': 'authorization_code'
+            }
+)
+strava_tokens = response.json()
+new_strava_tokens = response.json()
+strava_tokens = new_strava_tokens
 # %%
 url = "https://www.strava.com/api/v3/activities"
 configuration = swagger_client.Configuration()
@@ -59,6 +53,9 @@ scope = [
 file_name = 'client_key.json'
 creds = ServiceAccountCredentials.from_json_keyfile_name(file_name,scope)
 client = gspread.authorize(creds)
+open('client_key.json', 'w').close()
+open('client_secret.json', 'w').close()
+
 
 sheet_name = 'SDDBT - CCNC Training' 
 worksheet_name = 'Group 8'
