@@ -1,6 +1,0 @@
-requests
-pandas
-pytz
-gspread
-swagger_client
-oauth2client
