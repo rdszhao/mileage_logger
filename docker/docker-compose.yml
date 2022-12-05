@@ -24,7 +24,8 @@ services:
     environment:
       - STRAVA_CLIENT_ID
       - STRAVA_CLIENT_SECRET
-      - APP_URL=http://streamlit-activity-viewer.localhost
+      # - APP_URL=http://streamlit-activity-viewer.localhost
+      - APP_URL=//streamlit-activity-viewer.localhost
       - PYTHONDONTWRITEBYTECODE=1
     volumes:
       - ..:/app
