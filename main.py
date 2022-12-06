@@ -1,8 +1,7 @@
 import base64
-
+import re
 import altair as alt
 import streamlit as st
-
 import strava
 from pandas.api.types import is_numeric_dtype
     
@@ -19,11 +18,9 @@ if __name__ == '__main__':
 
     st.markdown(
         """
-        # :circus_tent: Streamlit Activity Viewer for Strava
-        This is a proof of concept of a [Streamlit](https://streamlit.io/) application that implements the [Strava API](https://developers.strava.com/) OAuth2 authentication flow.
+        # :dragon: mileage logger
+        This is built on top of Aart Goossens' activity viewer
         The source code can be found at [my GitHub](https://github.com/AartGoossens/streamlit-activity-viewer) and is licensed under an [MIT license](https://github.com/AartGoossens/streamlit-activity-viewer/blob/main/LICENSE).
-
-        [Get in touch me with me](https://gssns.io/services/) if you want me to build you an application on top of this one, or a similar application.
         """
     )
 
@@ -38,43 +35,37 @@ if __name__ == '__main__':
         )
         st.stop()
 
+    with st.form('email'):
+            email = st.text_input('email')
+            saved_email = st.form_submit_button('save')
+            regex = re.compile(r"([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\[[\t -Z^-~]*])")
+            valid_email = re.fullmatch(regex, email)
+    if valid_email:
+        st.write('email saved')
+    else:
+        st.write('please enter a valid email')
 
     activity = strava.select_strava_activity(strava_auth)
-    data = strava.download_activity(activity, strava_auth)
 
-
-    csv = data.to_csv()
-    csv_as_base64 = base64.b64encode(csv.encode()).decode()
-    st.markdown(
-        (
-            f"<a "
-            f"href=\"data:application/octet-stream;base64,{csv_as_base64}\" "
-            f"download=\"{activity['id']}.csv\" "
-            f"style=\"color:{strava.STRAVA_ORANGE};\""
-            f">Download activity as csv file</a>"
-        ),
-        unsafe_allow_html=True
-    )
-
-
-    columns = []
-    for column in data.columns:
-        if is_numeric_dtype(data[column]):
-            columns.append(column)
-
-    selected_columns = st.multiselect(
-        label="Select columns to plot",
-        options=columns
-    )
-
-    data["index"] = data.index
-
-    if selected_columns:
-        for column in selected_columns:
-            altair_chart = alt.Chart(data).mark_line(color=strava.STRAVA_ORANGE).encode(
-                x="index:T",
-                y=f"{column}:Q",
-            )
-            st.altair_chart(altair_chart, use_container_width=True)
-    else:
-        st.write("No column(s) selected")
+    crafts = [
+        'dragon boat',
+        'oc1',
+        'v1',
+        'oc6',
+        'oc2',
+        'sup',
+        'surfski',
+        'kayak',
+        'paddle erg',
+        'row erg',
+        'run'
+    ]
+    with st.form('submission'):
+        craft = st.selectbox('Craft', crafts)
+        submitted = st.form_submit_button('submit')
+    if submitted:
+        st.write('activity submitted')
+        distance = round(float(activity['distance']) / 1609, 2)
+        yy, mm, dd = activity['start_date'].split('T')[0].split('-')
+        activity_url = f"https://www.strava.com/activities/{activity['id']}"
+        print(email, craft, distance, mm, dd, yy, '\n', activity_url)

@@ -99,7 +99,7 @@ def logged_in_title(strava_auth, header=None):
 
     first_name = strava_auth["athlete"]["firstname"]
     last_name = strava_auth["athlete"]["lastname"]
-    col.markdown(f"*Welcome, {first_name} {last_name}!*")
+    col.markdown(f"*hi, {first_name} {last_name}!*")
 
 
 @st.cache(show_spinner=False, suppress_st_warning=True)
@@ -178,7 +178,9 @@ def activity_label(activity):
 
     start_date = arrow.get(activity["start_date_local"])
     human_readable_date = start_date.humanize(granularity=["day"])
-    date_string = start_date.format("YYYY-MM-DD")
+    if human_readable_date == '0 days ago':
+        human_readable_date = 'today'
+    date_string = start_date.format("MM-DD-YYYY")
 
     return f"{activity['name']} - {date_string} ({human_readable_date})"
 
@@ -207,16 +209,10 @@ def select_strava_activity(auth):
 
     if activity["name"] == DEFAULT_ACTIVITY_LABEL:
         st.write("No activity selected")
-        st.stop()
+        # st.stop()
         return
 
     activity_url = f"https://www.strava.com/activities/{activity['id']}"
-        
-    st.markdown(
-        f"<a href=\"{activity_url}\" style=\"color:{STRAVA_ORANGE};\">View on Strava</a>",
-        unsafe_allow_html=True
-    )
-
 
     return activity
 
@@ -269,37 +265,7 @@ def read_strava(
     client.refresh_token = refresh_token
 
     activity = client.get_activity(activity_id)
-    start_datetime = activity.start_date_local
-
-    streams = client.get_activity_streams(
-        activity_id=activity_id,
-        types=STREAM_TYPES,
-        series_type="time",
-    )
-
-    raw_data = dict()
-    for key, value in streams.items():
-        if key == "latlng":
-            latitude, longitude = list(zip(*value.data))
-            raw_data["latitude"] = latitude
-            raw_data["longitude"] = longitude
-        else:
-            try:
-                key = COLUMN_TRANSLATIONS[key]
-            except KeyError:
-                pass
-            raw_data[key] = value.data
-
-    data = pd.DataFrame(raw_data)
-
-    def time_to_datetime(time):
-        return start_datetime + timedelta(seconds=time)
-
-    data["datetime"] = data["time"].apply(time_to_datetime)
-    data = data.drop(["time"], axis="columns")
-    data = data.set_index("datetime")
-
-    return data
+    return activity
 
 
 
