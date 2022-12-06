@@ -1,5 +1,5 @@
 streamlit
-sweat
+stravalib
 httpx
 bokeh
 arrow
