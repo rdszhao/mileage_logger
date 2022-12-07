@@ -46,22 +46,26 @@ if __name__ == '__main__':
     activity = select_strava_activity(strava_auth)
 
     crafts = [
-        'dragon boat',
-        'oc1',
-        'v1',
-        'oc6',
-        'oc2',
-        'sup',
-        'surfski',
-        'kayak',
-        'paddle erg',
-        'row erg',
-        'run'
+        'Dragon Boat',
+        'OC1',
+        'V1',
+        'OC6',
+        'OC2',
+        'SUP',
+        'Surfski',
+        'Kayak',
+        'paddleErg',
+        'rowErg',
+        'Run'
     ]
     with st.form('submission'):
         craft = st.selectbox('Craft', crafts)
         submitted = st.form_submit_button('submit')
     if submitted:
         name = f"{strava_auth['athlete']['firstname']} {strava_auth['athlete']['lastname']}"
-        submit(name, email, craft, activity, debug=True)
-        st.write('activity submitted')
+        if valid_email:
+            # submit(name, email, craft, activity, debug=True)
+            submit(name, email, craft, activity)
+            st.write('activity submitted')
+        else:
+            st.write('remember to fill in an email')

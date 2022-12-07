@@ -7,11 +7,14 @@ import pandas as pd
 from datetime import timedelta
 from stravalib.client import Client
 from bokeh.models.widgets import Div
+import json
 
+with open('credentials.json', 'r') as file:
+    credentials = json.load(file)
 
 APP_URL = os.environ['APP_URL']
-STRAVA_CLIENT_ID = os.environ['STRAVA_CLIENT_ID']
-STRAVA_CLIENT_SECRET = os.environ['STRAVA_CLIENT_SECRET']
+STRAVA_CLIENT_ID = credentials['STRAVA_CLIENT_ID']
+STRAVA_CLIENT_SECRET = credentials['STRAVA_CLIENT_SECRET']
 STRAVA_AUTHORIZATION_URL = 'https://www.strava.com/oauth/authorize'
 STRAVA_API_BASE_URL = 'https://www.strava.com/api/v3'
 DEFAULT_ACTIVITY_LABEL = 'NO_ACTIVITY_SELECTED'
