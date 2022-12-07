@@ -192,26 +192,26 @@ def select_strava_activity(auth):
     col1, col2 = st.beta_columns([1, 3])
     with col1:
         page = st.number_input(
-            label="Activities page",
+            label="activities page",
             min_value=1,
-            help="The Strava API returns your activities in chunks of 30. Increment this field to go to the next page.",
+            help="the Strava API returns your activities in chunks of 30. Increment this field to go to the next page.",
         )
 
     with col2:
         activities = get_activities(auth=auth, page=page)
         if not activities:
-            st.info("This Strava account has no activities or you ran out of pages.")
+            st.info("this Strava account has no activities or you ran out of pages.")
             st.stop()
         default_activity = {"name": DEFAULT_ACTIVITY_LABEL, "start_date_local": ""}
 
         activity = st.selectbox(
-            label="Select an activity",
+            label="select an activity",
             options=[default_activity] + activities,
             format_func=activity_label,
         )
 
     if activity["name"] == DEFAULT_ACTIVITY_LABEL:
-        st.write("No activity selected")
+        st.write("no activity selected")
         # st.stop()
         return
 

@@ -1,4 +1,5 @@
-from requests import post
+import requests
+import streamlit as st
 
 def submit(name, email, craft, activity, debug=False):
 	distance = round(float(activity['distance']) / 1609, 2)
@@ -17,4 +18,8 @@ def submit(name, email, craft, activity, debug=False):
 	else:
 		url = f"{real_url}/formResponse"
 		entries = dict(zip(real_keys, values))
-	post(url, data=entries)
+	requests.post(url, data=entries)
+	st.markdown('**activity submitted!**')
+	st.write(f"_date_: {month}-{day}-{year}")
+	st.write(f"_distance_: {distance} mi")
+	st.write(link)
