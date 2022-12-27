@@ -40,9 +40,9 @@ if __name__ == '__main__':
             regex = compile(r"([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\[[\t -Z^-~]*])")
             valid_email = fullmatch(regex, email)
     if valid_email:
-        st.markdown('**email saved**')
+        st.markdown('__email saved__')
     else:
-        st.markdown('**please enter a valid email**')
+        st.markdown('__please enter a valid email__')
 
     activity = select_strava_activity(strava_auth)
 
@@ -65,7 +65,6 @@ if __name__ == '__main__':
     if submitted:
         name = f"{strava_auth['athlete']['firstname']} {strava_auth['athlete']['lastname']}"
         if valid_email:
-            submit(name, email, craft, activity, debug=True)
-            # submit(name, email, craft, activity)
+            submit(name, email, craft, activity)
         else:
-            st.markdown('**remember to fill in an email**')
+            st.markdown('__remember to fill in an email__')

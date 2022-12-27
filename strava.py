@@ -12,7 +12,7 @@ import json
 with open('credentials.json', 'r') as file:
     credentials = json.load(file)
 
-APP_URL = os.environ['APP_URL']
+APP_URL = credentials['APP_URL']
 STRAVA_CLIENT_ID = credentials['STRAVA_CLIENT_ID']
 STRAVA_CLIENT_SECRET = credentials['STRAVA_CLIENT_SECRET']
 STRAVA_AUTHORIZATION_URL = 'https://www.strava.com/oauth/authorize'
@@ -212,11 +212,7 @@ def select_strava_activity(auth):
 
     if activity["name"] == DEFAULT_ACTIVITY_LABEL:
         st.write("no activity selected")
-        # st.stop()
         return
-
-    activity_url = f"https://www.strava.com/activities/{activity['id']}"
-
     return activity
 
 
