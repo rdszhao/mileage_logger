@@ -1,0 +1,15 @@
+version: '3.7'
+
+logger:
+    image: logger
+    container_name: logger-dev
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    entrypoint: ["streamlit", "run", "main.py", "--server.address=localhost", "--server.enableCORS=false"]
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+    env_file: 
+      - .env
+    volumes:
+      - ..:/app
