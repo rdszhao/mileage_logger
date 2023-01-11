@@ -4,3 +4,4 @@ stravalib
 httpx
 bokeh
 arrow
+python-dotenv

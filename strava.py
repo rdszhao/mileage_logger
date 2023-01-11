@@ -4,10 +4,11 @@ import arrow
 import httpx
 import streamlit as st
 import pandas as pd
-from datetime import timedelta
 from stravalib.client import Client
 from bokeh.models.widgets import Div
+from dotenv import load_dotenv
 
+load_dotenv()
 APP_URL = os.environ['APP_URL']
 STRAVA_CLIENT_ID = os.environ['STRAVA_CLIENT_ID']
 STRAVA_CLIENT_SECRET = os.environ['STRAVA_CLIENT_SECRET']
